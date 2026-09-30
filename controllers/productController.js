@@ -63,4 +63,19 @@ async function createProduct(req,res){
 }
 
 
-module.exports={getProducts,getProductById,createProduct}
+async function updateProduct(req,res){
+    try {
+        const id=req.params.id
+        const data=req.body
+        const product=await productService.updateProduct(id,data)
+        res.json(product)
+    }catch(error){
+        console.log(error)
+        res.status(500).json({
+            message: "Failed to update product"
+        })
+    }
+}
+
+
+module.exports={getProducts,getProductById,createProduct,updateProduct}

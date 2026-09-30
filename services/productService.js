@@ -24,4 +24,17 @@ async function createProduct(product){
 }
 
 
-module.exports={getAllProducts,getProductById,createProduct}
+async function updateProduct(id,data){
+    const products=await productDatabase.getProducts()
+    const product=products.find(p=>p.id==id)
+    if (!product){
+        return null
+    }
+    product.name=data.name
+    product.price=data.price
+    await productDatabase.saveProducts(products)
+    return product
+}
+
+
+module.exports={getAllProducts,getProductById,createProduct,updateProduct}
