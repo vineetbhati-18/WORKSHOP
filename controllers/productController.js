@@ -25,12 +25,20 @@ async function getProducts(req,res){
 async function getProductById(req,res){
     try {
         const id=Number(req.params.id)
+        const key=req.originalUrl
+        const cachedProduct=cache.checkCache(key)
+        if (cachedProduct){
+            res.set('X-Cache','HIT')
+            return res.json(cachedProduct)
+        }
         const product=await productService.getProductById(id)
-        if(!product){
+        if (!product){
             return res.status(404).json({
                 message: 'Product not found'
             })
         }
+        cache.saveCache(key,product)
+        res.set('X-Cache', 'MISS')
         res.json(product)
     } catch(error){
         console.log(error)
