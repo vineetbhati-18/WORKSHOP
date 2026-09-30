@@ -8,7 +8,7 @@ function checkCache(key){
     }
     const currentTime=Date.now()
     const cacheAge=currentTime-cache[key].createdAt
-    if (cacheAge>TTL){
+    if (cacheAge>=TTL){
         delete cache[key]
         return null
     }
@@ -27,11 +27,16 @@ function saveCache(key,data){
 function cacheMiddleware(req,res,next){
     const key=req.originalUrl
     const data=checkCache(key)
-    if (data){
+    if(data){
         res.set('X-Cache','HIT')
         return res.json(data)
     }
     res.set('X-Cache','MISS')
+    const originalJson=res.json
+    res.json=function(data){
+        saveCache(key,data)
+        return originalJson.call(this,data)
+    }
     next()
 }
 
@@ -43,4 +48,4 @@ function clearCache(){
 }
 
 
-module.exports={checkCache,saveCache,clearCache}
+module.exports={checkCache,saveCache,clearCache,cacheMiddleware}

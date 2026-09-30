@@ -37,4 +37,16 @@ async function updateProduct(id,data){
 }
 
 
-module.exports={getAllProducts,getProductById,createProduct,updateProduct}
+async function deleteProduct(id){
+    const products=await productDatabase.getProducts()
+    const product=products.find(p=>p.id==id)
+    if (!product) {
+        return null
+    }
+    const newProducts=products.filter(p=>p.id!=id)
+    await productDatabase.saveProducts(newProducts)
+    return product
+}
+
+
+module.exports={getAllProducts,getProductById,createProduct,updateProduct,deleteProduct}
