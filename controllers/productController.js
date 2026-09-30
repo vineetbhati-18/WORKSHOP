@@ -1,10 +1,19 @@
 const productService=require('../services/productService')
+const cache=require('../middleware/cacheMiddleware')
 
 async function getProducts(req,res){
     try {
+        const key=req.originalUrl
+        const cachedProducts=cache.checkCache(key)
+        if(cachedProducts){
+            res.set('X-Cache','HIT')
+            return res.json(cachedProducts)
+        }
         const products=await productService.getAllProducts()
+        cache.saveCache(key,products)
+        res.set('X-Cache','MISS')
         res.json(products)
-    } catch (error) {
+    }catch(error){
         console.log(error)
         res.status(500).json({
             message: 'Failed to fetch products'

@@ -43,4 +43,4 @@ function clearCache(){
 }
 
 
-module.exports={cacheMiddleware,saveCache,clearCache}
+module.exports={checkCache,saveCache,clearCache}
