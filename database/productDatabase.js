@@ -9,4 +9,11 @@ async function getProducts(){
 }
 
 
-module.exports={getProducts}
+async function saveProducts(products){
+    await fs.writeFile(
+        pathToFile,
+        JSON.stringify(products,null,2)
+    )
+}
+
+module.exports={getProducts,saveProducts}

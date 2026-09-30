@@ -15,4 +15,13 @@ async function getProductById(id){
 }
 
 
-module.exports={getAllProducts,getProductById}
+async function createProduct(product){
+    const products=await productDatabase.getProducts()
+    product.id=products.length+1
+    products.push(product)
+    await productDatabase.saveProducts(products)
+    return product
+}
+
+
+module.exports={getAllProducts,getProductById,createProduct}

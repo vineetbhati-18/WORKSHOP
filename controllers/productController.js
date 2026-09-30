@@ -49,4 +49,18 @@ async function getProductById(req,res){
 }
 
 
-module.exports={getProducts,getProductById}
+async function createProduct(req,res){
+    try {
+        const product=await productService.createProduct(req.body)
+        cache.clearCache()
+        res.status(201).json(product)
+    }catch(error){
+        console.log(error)
+        res.status(500).json({
+            message: 'Failed to create product'
+        })
+    }
+}
+
+
+module.exports={getProducts,getProductById,createProduct}
