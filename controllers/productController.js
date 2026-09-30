@@ -32,4 +32,4 @@ async function getProductById(req,res){
 }
 
 
-module.exports={getProducts}
+module.exports={getProducts,getProductById}

@@ -15,4 +15,4 @@ async function getProductById(id){
 }
 
 
-module.exports={getAllProducts}
+module.exports={getAllProducts,getProductById}
